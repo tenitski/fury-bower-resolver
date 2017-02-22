@@ -169,6 +169,37 @@ moment:          implicitly found and installed from fury-org
 jquery:          installed from public registry after not finding it in fury-org
 ```
 
+## Overriding package sources
+
+It is possible to override packages matching a specified source to be fetched from Gemfury.
+One of the use cases is when a child dependency itself depends on private package hosted on Github
+and you want to install it via Gemfury instead.
+
+Child dependency `bower.json` can contain something like this:
+
+```json
+{
+  "dependencies": {
+    "my-private-package": "git@github.com:my-org/my-private-package#1.2.3"
+  }
+}
+```
+
+To force `my-private-package` to come from Gemfury without modifying that child
+ `bower.json`, add the following to your `.bowerrc`:
+
+```json
+"furyResolver": {
+  "sourceOverrides": [
+    {
+      "source": "^git@github.com:\/?my-org/(.+?)(\\.git)?$",
+      "override": "fury:\/\/my-org/$1"
+    }
+  ]
+}
+```
+
+
 ## Contribution and Improvements
 
 Please [email us](mailto:support@gemfury.com) if we've missed some key
